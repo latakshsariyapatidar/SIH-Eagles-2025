@@ -99,8 +99,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
                 </div>
             )}
             
-            {/* Camera and Mic buttons above input - positioned at corners */}
-            <div className="flex justify-between items-center mb-3">
+            {/* Input section - original design with inline buttons */}
+            <div className="flex items-end gap-3">
                 <input
                     type="file"
                     ref={fileInputRef}
@@ -110,30 +110,30 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
                     id="image-upload"
                 />
                 
-                {/* Camera button - left corner */}
-                <button 
-                    onClick={() => fileInputRef.current?.click()}
-                    className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
-                    aria-label="Upload image"
-                    disabled={isLoading}
-                >
-                    <CameraIcon />
-                </button>
+                {/* Left side buttons container */}
+                <div className="flex gap-2">
+                    {/* Camera button */}
+                    <button 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
+                        aria-label="Upload image"
+                        disabled={isLoading}
+                    >
+                        <CameraIcon />
+                    </button>
 
-                {/* Microphone button - right corner */}
-                <button 
-                    onClick={() => {/* No logic implemented yet */}}
-                    className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
-                    aria-label="Voice input"
-                    disabled={isLoading}
-                >
-                    <MicrophoneIcon />
-                </button>
-            </div>
-            
-            {/* Input section - full width */}
-            <div className="flex items-end gap-3">                
-                {/* Text input container - full width */}
+                    {/* Microphone button */}
+                    <button 
+                        onClick={() => {/* No logic implemented yet */}}
+                        className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
+                        aria-label="Voice input"
+                        disabled={isLoading}
+                    >
+                        <MicrophoneIcon />
+                    </button>
+                </div>
+                
+                {/* Text input container */}
                 <div className="flex-1 relative">
                     <input
                         type="text"

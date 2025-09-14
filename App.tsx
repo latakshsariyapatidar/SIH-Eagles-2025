@@ -93,7 +93,7 @@ function AppContent() {
   }
 
   return (
-    <div className="flex flex-col h-screen w-full max-w-sm sm:max-w-md mx-auto bg-gradient-to-b from-gray-50 to-chat-bg font-sans shadow-soft-lg relative overflow-hidden">
+    <div className="flex flex-col h-dvh w-full bg-gradient-to-b from-gray-50 to-chat-bg font-sans relative overflow-hidden">
       {/* Background pattern overlay */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div className="w-full h-full" style={{
