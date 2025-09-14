@@ -1,0 +1,5 @@
+{
+  "name": "SmartAgri",
+  "description": "An AI-powered, multilingual crop advisory app for farmers. It uses an image-first, chat-based interface to provide advice on crop diseases, market prices, and weather, with full voice support to overcome literacy barriers.",
+  "requestFramePermissions": []
+}
