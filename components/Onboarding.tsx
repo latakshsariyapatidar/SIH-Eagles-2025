@@ -66,7 +66,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const currentTexts = TEXTS[selectedLang];
 
   return (
-    <div className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-green-50 via-teal-50 to-blue-50 p-6 text-center relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-green-50 via-teal-50 to-blue-50 p-6 text-center relative overflow-y-auto">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-20 h-20 bg-green-200/30 rounded-full blur-xl"></div>
