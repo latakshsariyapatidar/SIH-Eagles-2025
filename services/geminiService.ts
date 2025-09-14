@@ -5,9 +5,13 @@ import { Language } from '../types';
 import type { ChatContextMessage } from '../hooks/useChatContext';
 import { chatDatabase } from './chatDatabase';
 
-// Get API key from environment or fallback
+// Get API key from environment
 const getApiKey = () => {
-  return import.meta.env?.VITE_GEMINI_API_KEY || 'AIzaSyDJYputUg6nPpVjaIXb-VzZ4GMKTAL1GXo';
+  const apiKey = import.meta.env?.VITE_GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('VITE_GEMINI_API_KEY is not defined in environment variables. Please check your .env file.');
+  }
+  return apiKey;
 };
 
 const ai = new GoogleGenAI({ apiKey: getApiKey() });
