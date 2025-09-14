@@ -74,10 +74,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
     }
 
     return (
-        <div className="p-4 bg-white/95 backdrop-blur-md border-t border-gray-200/50 relative z-10">
-            {/* Image preview section */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200/50 z-10">
+            {/* Image preview section - absolutely positioned */}
             {imagePreview && (
-                <div className="mb-3 animate-slide-up">
+                <div className="absolute bottom-full left-4 mb-2 animate-slide-up">
                     <div className="relative inline-block">
                         <img 
                             src={imagePreview} 
@@ -99,93 +99,95 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
                 </div>
             )}
             
-            {/* Input section - original design with inline buttons */}
-            <div className="flex items-end gap-3">
-                <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    accept="image/*"
-                    className="hidden"
-                    id="image-upload"
-                />
-                
-                {/* Left side buttons container */}
-                <div className="flex gap-2">
-                    {/* Camera button */}
-                    <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
-                        aria-label="Upload image"
-                        disabled={isLoading}
-                    >
-                        <CameraIcon />
-                    </button>
-
-                    {/* Microphone button */}
-                    <button 
-                        onClick={() => {/* No logic implemented yet */}}
-                        className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
-                        aria-label="Voice input"
-                        disabled={isLoading}
-                    >
-                        <MicrophoneIcon />
-                    </button>
-                </div>
-                
-                {/* Text input container */}
-                <div className="flex-1 relative">
+            {/* Input section - fixed position */}
+            <div className="p-4">
+                <div className="flex items-end gap-3">
                     <input
-                        type="text"
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder="Type a message or upload an image..."
-                        className="w-full p-4 pr-12 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-soft text-base resize-none disabled:bg-gray-50 disabled:text-gray-500"
-                        disabled={isLoading}
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        className="hidden"
+                        id="image-upload"
                     />
                     
-                    {/* Character count indicator for long messages */}
-                    {text.length > 100 && (
-                        <div className="absolute bottom-1 right-1 text-xs text-gray-400 bg-white px-1 rounded">
-                            {text.length}
-                        </div>
-                    )}
+                    {/* Left side buttons container */}
+                    <div className="flex gap-2">
+                        {/* Camera button */}
+                        <button 
+                            onClick={() => fileInputRef.current?.click()}
+                            className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
+                            aria-label="Upload image"
+                            disabled={isLoading}
+                        >
+                            <CameraIcon />
+                        </button>
+
+                        {/* Microphone button */}
+                        <button 
+                            onClick={() => {/* No logic implemented yet */}}
+                            className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
+                            aria-label="Voice input"
+                            disabled={isLoading}
+                        >
+                            <MicrophoneIcon />
+                        </button>
+                    </div>
+                    
+                    {/* Text input container */}
+                    <div className="flex-1 relative">
+                        <input
+                            type="text"
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            placeholder="Type a message or upload an image..."
+                            className="w-full p-4 pr-12 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-soft text-base resize-none disabled:bg-gray-50 disabled:text-gray-500"
+                            disabled={isLoading}
+                        />
+                        
+                        {/* Character count indicator for long messages */}
+                        {text.length > 100 && (
+                            <div className="absolute bottom-1 right-1 text-xs text-gray-400 bg-white px-1 rounded">
+                                {text.length}
+                            </div>
+                        )}
+                    </div>
+                    
+                    {/* Send button */}
+                    <button
+                        onClick={handleSend}
+                        disabled={isLoading || (!text.trim() && !image)}
+                        className={`p-4 rounded-xl shadow-soft touch-target focus-ring transition-all duration-300 ${
+                            isLoading || (!text.trim() && !image)
+                                ? 'bg-gray-300 cursor-not-allowed' 
+                                : 'bg-gradient-to-r from-secondary-400 to-primary-500 hover:from-secondary-500 hover:to-primary-600 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0'
+                        }`}
+                        aria-label="Send message"
+                    >
+                        {isLoading ? (
+                            <LoadingSpinner size="md" color="white" />
+                        ) : (
+                            <SendIcon />
+                        )}
+                    </button>
                 </div>
                 
-                {/* Send button */}
-                <button
-                    onClick={handleSend}
-                    disabled={isLoading || (!text.trim() && !image)}
-                    className={`p-4 rounded-xl shadow-soft touch-target focus-ring transition-all duration-300 ${
-                        isLoading || (!text.trim() && !image)
-                            ? 'bg-gray-300 cursor-not-allowed' 
-                            : 'bg-gradient-to-r from-secondary-400 to-primary-500 hover:from-secondary-500 hover:to-primary-600 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0'
-                    }`}
-                    aria-label="Send message"
-                >
-                    {isLoading ? (
-                        <LoadingSpinner size="md" color="white" />
-                    ) : (
-                        <SendIcon />
+                {/* Help text */}
+                <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+                    <div className="flex items-center gap-2">
+                        <span>💡</span>
+                        <span>Tip: Upload a crop image for better diagnosis</span>
+                    </div>
+                    {text.length > 0 && (
+                        <button 
+                            onClick={() => setText('')}
+                            className="text-primary-500 hover:text-primary-600 font-medium"
+                        >
+                            Clear
+                        </button>
                     )}
-                </button>
-            </div>
-            
-            {/* Help text */}
-            <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
-                <div className="flex items-center gap-2">
-                    <span>💡</span>
-                    <span>Tip: Upload a crop image for better diagnosis</span>
                 </div>
-                {text.length > 0 && (
-                    <button 
-                        onClick={() => setText('')}
-                        className="text-primary-500 hover:text-primary-600 font-medium"
-                    >
-                        Clear
-                    </button>
-                )}
             </div>
         </div>
     );

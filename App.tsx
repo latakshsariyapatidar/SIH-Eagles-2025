@@ -107,7 +107,7 @@ function AppContent() {
           <Onboarding onComplete={handleOnboardingComplete} />
         </div>
       ) : (
-        <div className="flex flex-col h-full animate-fade-in">
+        <div className="flex flex-col h-full animate-fade-in pb-32">
           <Header />
           {/* Show top weather widget only after first message */}
           {!shouldShowCenterWeather && <WeatherWidget />}
@@ -116,11 +116,13 @@ function AppContent() {
           {shouldShowCenterWeather ? (
             <CenterWeatherWidget />
           ) : (
-            <ChatInterface 
-              messages={chatHistory} 
-              isLoading={isLoading} 
-              onQuickAction={handleQuickAction}
-            />
+            <div className="flex-1 overflow-hidden">
+              <ChatInterface 
+                messages={chatHistory} 
+                isLoading={isLoading} 
+                onQuickAction={handleQuickAction}
+              />
+            </div>
           )}
           
           <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
