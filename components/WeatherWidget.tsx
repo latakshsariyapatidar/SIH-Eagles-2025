@@ -33,16 +33,55 @@ const WindIcon = () => (
     </svg>
 );
 
+const RainIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+        <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+        <path d="m16 14-3 5-3-5"></path>
+        <path d="m8 14-3 5-3-5"></path>
+    </svg>
+);
+
+const ThermometerIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-400">
+        <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"></path>
+    </svg>
+);
+
+const CheckIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+        <path d="M20 6 9 17l-5-5"></path>
+    </svg>
+);
+
+const AlertIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-600">
+        <path d="m21 16-4 4-4-4"></path>
+        <path d="M3 12h14"></path>
+        <path d="M3 6h14"></path>
+        <path d="M3 18h14"></path>
+    </svg>
+);
+
+const WarningIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-600">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+        <path d="M12 9v4"></path>
+        <path d="m12 17 .01 0"></path>
+    </svg>
+);
+
 interface WeatherData {
     current: {
         temperature_2m: number;
         wind_speed_10m: number;
+        precipitation?: number;
         time: string;
     };
     hourly: {
         temperature_2m: number[];
         relative_humidity_2m: number[];
         wind_speed_10m: number[];
+        precipitation?: number[];
         time: string[];
     };
 }
@@ -115,7 +154,7 @@ const WeatherWidget = () => {
     const fetchWeatherData = async (latitude: number, longitude: number) => {
         try {
             const response = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto&forecast_days=1`
+                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,precipitation&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&timezone=auto&forecast_days=1`
             );
 
             if (!response.ok) {
@@ -154,12 +193,12 @@ const WeatherWidget = () => {
     // Get farming advice based on weather
     const getFarmingAdvice = () => {
         if (!weatherData) return 'Loading weather data...';
-        
+
         const temp = weatherData.current.temperature_2m;
         const windSpeed = weatherData.current.wind_speed_10m;
         const currentHour = new Date().getHours();
         const humidity = weatherData.hourly.relative_humidity_2m[currentHour] || 50;
-        
+
         if (temp > 35) return 'Very hot - avoid midday farming, ensure proper hydration';
         if (temp < 5) return 'Very cold - protect crops from frost';
         if (windSpeed > 20) return 'Windy conditions - avoid spraying pesticides';
@@ -168,7 +207,68 @@ const WeatherWidget = () => {
         return 'Good weather for outdoor farming';
     };
 
-    return (
+    // Analyze farming conditions based on weather
+    const analyzeFarmingConditions = () => {
+        if (!weatherData) return null;
+        
+        const temp = weatherData.current.temperature_2m;
+        const windSpeed = weatherData.current.wind_speed_10m;
+        const currentHour = new Date().getHours();
+        const precipitation = weatherData.hourly.precipitation?.[currentHour] || 0;
+        
+        let condition = 'good';
+        let message = 'Good for farming';
+        let bgColor = 'bg-green-100';
+        let textColor = 'text-green-800';
+        let borderColor = 'border-green-300';
+        let icon = <CheckIcon />;
+
+        // Temperature analysis (ideal range: 15-30°C)
+        if (temp < 5 || temp > 40) {
+            condition = 'poor';
+            message = 'Extreme temperature - not ideal for farming';
+            bgColor = 'bg-red-100';
+            textColor = 'text-red-800';
+            borderColor = 'border-red-300';
+            icon = <WarningIcon />;
+        } else if (temp < 10 || temp > 35) {
+            condition = 'moderate';
+            message = 'Moderate conditions - some crops may be affected';
+            bgColor = 'bg-yellow-100';
+            textColor = 'text-yellow-800';
+            borderColor = 'border-yellow-300';
+            icon = <AlertIcon />;
+        }
+
+        // Precipitation analysis
+        if (precipitation > 20) {
+            condition = 'poor';
+            message = 'Heavy rain expected - avoid outdoor farming activities';
+            bgColor = 'bg-red-100';
+            textColor = 'text-red-800';
+            borderColor = 'border-red-300';
+            icon = <WarningIcon />;
+        } else if (precipitation > 10) {
+            condition = 'moderate';
+            message = 'Light rain expected - plan accordingly';
+            bgColor = 'bg-yellow-100';
+            textColor = 'text-yellow-800';
+            borderColor = 'border-yellow-300';
+            icon = <AlertIcon />;
+        }
+
+        // Wind speed analysis (ideal: < 15 km/h)
+        if (windSpeed > 25) {
+            condition = 'poor';
+            message = 'High winds - not suitable for spraying or delicate operations';
+            bgColor = 'bg-red-100';
+            textColor = 'text-red-800';
+            borderColor = 'border-red-300';
+            icon = <WarningIcon />;
+        }
+
+        return { condition, message, bgColor, textColor, borderColor, icon };
+    };    return (
         <div className="bg-zinc-300 text-black px-4 py-3 text-sm sticky top-0 z-10 backdrop-blur-md border-b border-white/20">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -199,19 +299,18 @@ const WeatherWidget = () => {
                         </button>
                     </div>
                 ) : weatherData ? (
-                    <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-1 bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm">
-                            <span className="text-xs opacity-80">{getText('temp')}:</span>
+                    <div className="flex items-center gap-3 text-sm">
+                        {/* Temperature */}
+                        <div className="flex items-center gap-1">
+                            <ThermometerIcon />
                             <span className="font-bold">{Math.round(weatherData.current.temperature_2m)}°C</span>
                         </div>
-                        {/* <div className="flex items-center gap-1 bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm">
-                            <WindIcon />
-                            <span className="font-bold">{Math.round(weatherData.current.wind_speed_10m)} km/h</span>
-                        </div> */}
-                        {/* <div className="flex items-center gap-1 bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm">
-                            <span className="text-xs opacity-80">Humidity:</span>
-                            <span className="font-bold">{Math.round(weatherData.hourly.relative_humidity_2m[new Date().getHours()] || 50)}%</span>
-                        </div> */}
+                        
+                        {/* Rain forecast */}
+                        <div className="flex items-center gap-1">
+                            <RainIcon />
+                            <span className="font-bold">{Math.round(weatherData.hourly.precipitation?.[new Date().getHours()] || 0)}mm</span>
+                        </div>
                     </div>
                 ) : (
                     <div className="flex items-center gap-2 text-sm">
@@ -221,10 +320,28 @@ const WeatherWidget = () => {
                 )}
             </div>
             
+            {/* Farming conditions indicator */}
+            {weatherData && (
+                <div className="mt-3">
+                    {(() => {
+                        const conditions = analyzeFarmingConditions();
+                        if (!conditions) return null;
+                        return (
+                            <div className={`flex items-center gap-2 p-2 rounded-lg border ${conditions.bgColor} ${conditions.textColor} ${conditions.borderColor}`}>
+                                {conditions.icon}
+                                <span className="font-medium text-xs">{conditions.message}</span>
+                            </div>
+                        );
+                    })()}
+                </div>
+            )}
+
             {/* Weather forecast and farming advice */}
             <div className="mt-2 flex items-center gap-2 text-xs opacity-90">
                 <span>{getWeatherEmoji()}</span>
-                <span>{getFarmingAdvice()}</span>
+                <span>Wind: {weatherData ? Math.round(weatherData.current.wind_speed_10m) : 0} km/h</span>
+                <span>•</span>
+                <span>Humidity: {weatherData ? Math.round(weatherData.hourly.relative_humidity_2m[new Date().getHours()] || 50) : 50}%</span>
                 {weatherData && (
                     <>
                         <span>•</span>

@@ -2,8 +2,10 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import Header from './components/Header';
 import WeatherWidget from './components/WeatherWidget';
+import CenterWeatherWidget from './components/CenterWeatherWidget';
 import ChatInterface from './components/ChatInterface';
 import ChatInput from './components/ChatInput';
+import InitialScreen from './components/InitialScreen';
 import Onboarding from './components/Onboarding';
 import { ToastContainer } from './components/Toast';
 import { AppProvider } from './context/AppContext';
@@ -15,7 +17,7 @@ import type { Message, CardData } from './types';
 import { Language, CardType, Urgency } from './types';
 
 function AppContent() {
-  const [isOnboarding, setIsOnboarding] = useState(false);
+  const [isOnboarding, setIsOnboarding] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [language, setLanguage] = useState<Language>(Language.EN);
   const { toasts, removeToast, showError, showSuccess } = useToast();
@@ -30,20 +32,16 @@ function AppContent() {
   // Use chat history from database instead of local state
   useEffect(() => {
     if (!chatLoading && chatHistory.length === 0) {
-      // Only add welcome message if no chat history exists
-      const welcomeMessage: Omit<Message, 'id' | 'timestamp'> = {
-        sender: 'ai',
-        cardData: {
-          type: CardType.TIP,
-          urgency: Urgency.NORMAL,
-          title: 'Welcome to SmartAgri!',
-          content: ['To get started, please upload a photo of your crop. You can also add a question in the text box below.'],
-          source: 'SmartAgri Assistant'
-        }
-      };
-      addToChatHistory(welcomeMessage);
+      // Don't add any welcome message, let the initial screen show instead
     }
   }, [chatLoading, chatHistory.length, addToChatHistory]);
+
+  // Check if we should show the initial screen (no user messages sent)
+  const shouldShowInitialScreen = chatHistory.length === 0 || 
+    (chatHistory.length === 1 && chatHistory[0].sender === 'ai' && chatHistory[0].cardData?.title === 'Welcome to SmartAgri!');
+
+  // Check if we should show center weather (no messages at all)
+  const shouldShowCenterWeather = chatHistory.length === 0;
 
   const handleSendMessage = useCallback(async (text: string, image: { data: string; mimeType: string } | null) => {
     if (!text && !image) return;
@@ -111,12 +109,20 @@ function AppContent() {
       ) : (
         <div className="flex flex-col h-full animate-fade-in">
           <Header />
-          <WeatherWidget />
-          <ChatInterface 
-            messages={chatHistory} 
-            isLoading={isLoading} 
-            onQuickAction={handleQuickAction}
-          />
+          {/* Show top weather widget only after first message */}
+          {!shouldShowCenterWeather && <WeatherWidget />}
+          
+          {/* Show center weather initially, then switch to chat interface */}
+          {shouldShowCenterWeather ? (
+            <CenterWeatherWidget />
+          ) : (
+            <ChatInterface 
+              messages={chatHistory} 
+              isLoading={isLoading} 
+              onQuickAction={handleQuickAction}
+            />
+          )}
+          
           <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
         </div>
       )}

@@ -99,8 +99,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
                 </div>
             )}
             
-            {/* Input section */}
-            <div className="flex items-end gap-3">
+            {/* Camera and Mic buttons above input - positioned at corners */}
+            <div className="flex justify-between items-center mb-3">
                 <input
                     type="file"
                     ref={fileInputRef}
@@ -110,7 +110,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
                     id="image-upload"
                 />
                 
-                {/* Camera button */}
+                {/* Camera button - left corner */}
                 <button 
                     onClick={() => fileInputRef.current?.click()}
                     className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
@@ -120,7 +120,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
                     <CameraIcon />
                 </button>
 
-                {/* Microphone button */}
+                {/* Microphone button - right corner */}
                 <button 
                     onClick={() => {/* No logic implemented yet */}}
                     className="p-3 bg-gray-100 rounded-xl shadow-soft hover:bg-gray-200 hover:shadow-md transition-all duration-200 touch-target focus-ring"
@@ -129,15 +129,18 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
                 >
                     <MicrophoneIcon />
                 </button>
-                
-                {/* Text input */}
+            </div>
+            
+            {/* Input section - full width */}
+            <div className="flex items-end gap-3">                
+                {/* Text input container - full width */}
                 <div className="flex-1 relative">
                     <input
                         type="text"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         onKeyPress={handleKeyPress}
-                        placeholder={getText('placeholder')}
+                        placeholder="Type a message or upload an image..."
                         className="w-full p-4 pr-12 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-soft text-base resize-none disabled:bg-gray-50 disabled:text-gray-500"
                         disabled={isLoading}
                     />
@@ -169,7 +172,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
                 </button>
             </div>
             
-            {/* Typing indicator or quick actions */}
+            {/* Help text */}
             <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
                 <div className="flex items-center gap-2">
                     <span>💡</span>
