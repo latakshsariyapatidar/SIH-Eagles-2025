@@ -21,8 +21,8 @@ const LanguageSelector: React.FC<{ selected: Language, onSelect: (lang: Language
           onClick={() => onSelect(lang)}
           className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 border-2 text-left ${
             selected === lang
-              ? 'bg-gradient-to-r from-primary-500 to-secondary-400 text-white border-transparent shadow-soft scale-105'
-              : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border-gray-200 hover:border-gray-300'
+              ? 'bg-gradient-to-r from-primary-500 to-secondary-400 text-zinc-900 border-transparent shadow-soft scale-105'
+              : 'bg-gray-50 text-zinc-400 hover:bg-gray-100 border-gray-200 hover:border-gray-300'
           }`}
         >
           <span className="text-xl">{languageFlags[lang]}</span>
@@ -81,20 +81,20 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
             <span className="text-3xl">🌱</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2 text-balance">{currentTexts.title}</h1>
-          <p className="text-primary-600 font-medium mb-3">{currentTexts.subtitle}</p>
+          <p className="text-black font-medium mb-3">{currentTexts.subtitle}</p>
           <p className="text-sm text-gray-600 leading-relaxed">{currentTexts.description}</p>
         </div>
 
         {/* Language selection */}
         <div className="mb-8">
-          <label className="block text-gray-700 mb-4 font-semibold text-sm">{currentTexts.select}</label>
+          <label className="block text-black mb-4 font-semibold text-sm">{currentTexts.select}</label>
           <LanguageSelector selected={selectedLang} onSelect={setSelectedLang} />
         </div>
 
         {/* Start button */}
         <button
           onClick={() => onComplete(selectedLang)}
-          className="w-full bg-gradient-to-r from-secondary-400 to-primary-500 text-white font-bold py-4 px-6 rounded-xl hover:from-secondary-500 hover:to-primary-600 transition-all duration-300 transform hover:scale-105 hover:shadow-soft-lg active:scale-95 focus-ring"
+          className="w-full bg-gradient-to-r from-secondary-400 to-primary-500 text-zinc-500 font-bold py-4 px-6 rounded-xl hover:from-secondary-500 hover:to-primary-600 transition-all duration-300 transform hover:scale-105 hover:shadow-soft-lg active:scale-95 focus-ring"
         >
           <span className="flex items-center justify-center gap-2">
             <span>{currentTexts.button}</span>
