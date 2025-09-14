@@ -11,7 +11,7 @@ import { ToastContainer } from './components/Toast';
 import { AppProvider } from './context/AppContext';
 import { useToast } from './hooks/useToast';
 import { useChatContext } from './hooks/useChatContext';
-import { getAdvisory } from './services/geminiService';
+import { getAdvisory } from './services/aiService';
 import type { Message, CardData } from './types';
 // FIX: Import CardType and Urgency enums to use for cardData properties.
 import { Language, CardType, Urgency } from './types';

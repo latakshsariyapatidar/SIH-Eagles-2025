@@ -47,7 +47,7 @@
 - **Tailwind CSS** - Utility-first styling
 
 ### AI & APIs
-- **Google Gemini AI** - Advanced language model for agricultural insights
+- **Hugging Face GPT-OSS-120B** - Advanced open-source language model for agricultural insights
 - **Custom Trained Model** - Specialized crop disease detection model
 - **Open Meteo API** - Real-time weather data
 - **Web Speech API** - Voice recognition capabilities
@@ -62,7 +62,7 @@
 ### Prerequisites
 - **Node.js** (v18 or higher)
 - **npm** or **yarn**
-- **Gemini API Key** from Google AI Studio
+- **Hugging Face API Token** from Hugging Face Hub
 
 ### 1. Clone the Repository
 ```bash
@@ -78,7 +78,7 @@ npm install
 ### 3. Environment Configuration
 Create a `.env` file in the root directory:
 ```env
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
+VITE_HF_TOKEN=your_huggingface_token_here
 ```
 
 ### 4. Run Development Server
@@ -180,7 +180,7 @@ npm run type-check  # TypeScript checking
 ```
 
 ### Environment Variables
-- `VITE_GEMINI_API_KEY` - Google Gemini API key
+- `VITE_HF_TOKEN` - Hugging Face API token
 - `VITE_WEATHER_API_KEY` - Weather API key (optional)
 
 ## 🤝 Contributing
