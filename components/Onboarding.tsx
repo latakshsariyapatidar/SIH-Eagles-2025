@@ -68,7 +68,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-green-50 via-teal-50 to-blue-50 p-6 text-center relative overflow-y-auto">
       {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-y-auto pointer-events-none">
         <div className="absolute top-10 left-10 w-20 h-20 bg-green-200/30 rounded-full blur-xl"></div>
         <div className="absolute bottom-20 right-10 w-32 h-32 bg-teal-200/30 rounded-full blur-xl"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-green-100/20 to-teal-100/20 rounded-full blur-3xl"></div>
