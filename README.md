@@ -6,7 +6,6 @@
 
 This contains everything you need to run your app locally.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1JitEupjGZRDKmOGvumOVBIFc1FuQCeg-
 
 ## Run Locally
 
@@ -15,6 +14,6 @@ View your app in AI Studio: https://ai.studio/apps/drive/1JitEupjGZRDKmOGvumOVBI
 
 1. Install dependencies:
    `npm install`
-2. Set the `VITE_GEMINI_API_KEY` in [.env](.env) to your Gemini API key
+2. Set the `VITE_GEMINI_API_KEY` in [.env]git(.env) to your Gemini API key
 3. Run the app:
    `npm run dev`
